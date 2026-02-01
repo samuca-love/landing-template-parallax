@@ -268,7 +268,8 @@ export default function Page() {
           </nav>
           <div className="flex items-center gap-3">
             <Button variant="secondary" href="#preco">Ver oferta</Button>
-            <Button href="#preco">Comprar</Button>
+            <Button href="https://pay.hotmart.com/K104202042G
+">Comprar</Button>
           </div>
         </div>
       </header>
@@ -305,7 +306,8 @@ export default function Page() {
               </motion.p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button href="#preco">Quero essa estrutura</Button>
+                <Button href="https://pay.hotmart.com/K104202042G
+">Quero essa estrutura</Button>
                 <Button variant="secondary" href="#beneficios">Explorar</Button>
                 <div className="text-xs text-white/50">Sem dependências pesadas • Performance-first</div>
               </div>
@@ -455,7 +457,8 @@ export default function Page() {
                 Vídeos vendem — e ajudam o cliente a visualizar o resultado.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button href="#preco">Quero comprar por R$ 50</Button>
+                <Button href="https://pay.hotmart.com/K104202042G
+">Quero comprar por R$ 50</Button>
                 <Button variant="secondary" href="#instalacao">Como instalar</Button>
               </div>
               <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg">
@@ -569,7 +572,8 @@ export default function Page() {
                   É literalmente baixar, instalar dependências e rodar.
                 </p>
               </div>
-              <Button variant="secondary" href="#preco">Ver preço</Button>
+              <Button variant="secondary" href="https://pay.hotmart.com/K104202042G
+">Ver preço</Button>
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -639,7 +643,8 @@ npm run dev`}
               </div>
 
               <div className="mt-8 flex flex-col gap-3">
-                <Button href="#">Comprar agora</Button>
+                <Button href="https://pay.hotmart.com/K104202042G
+">Comprar agora</Button>
                 <Button variant="secondary" href="#faq">Tirar dúvidas</Button>
                 <div className="text-center text-xs text-white/50">Pagamento seguro • Checkout externo</div>
               </div>
@@ -692,7 +697,8 @@ npm run dev`}
                   <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold">
                     R$ 49,99
                   </div>
-                  <Button href="#preco">Comprar</Button>
+                  <Button href="https://pay.hotmart.com/K104202042G
+">Comprar</Button>
                 </div>
               </div>
             </div>
