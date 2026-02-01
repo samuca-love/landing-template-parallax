@@ -5,7 +5,9 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion';
+import Image from "next/image";
+
 
 // --- small utilities ---
 function useScrollY() {
@@ -177,10 +179,15 @@ function VideoBlock() {
 export default function Page() {
   const scrollY = useScrollY();
   const { x: mx, y: my } = useMouseParallax(14);
+  // Navbar fade on scroll (mobile)
+const { scrollY: scrollYMotion } = useScroll();
+const navOpacity = useTransform(scrollYMotion, [0, 120], [1, 0]);
+const navY = useTransform(scrollYMotion, [0, 120], [0, -40]);
+
 
   // Scroll parallax transforms
-  const heroShift = Math.min(scrollY * 0.35, 120);
-  const glowShift = Math.min(scrollY * 0.18, 60);
+  const heroShift = Math.min(scrollY * 0.35, 48);
+  const glowShift = Math.min(scrollY * 0.18, 30);
 
   // Sticky mobile CTA appears after a bit of scrolling
   const showStickyCta = scrollY > 220;
@@ -252,30 +259,59 @@ export default function Page() {
       </div>
 
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/60 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-2xl bg-white text-zinc-950 grid place-items-center font-black">LP</div>
-            <div className="leading-tight">
-              <div className="text-sm font-semibold">Landing Template</div>
-              <div className="text-xs text-white/60">Produtos digitais</div>
-            </div>
-          </div>
-          <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-            <a className="hover:text-white" href="#beneficios">Benefícios</a>
-            <a className="hover:text-white" href="#prova">Prova social</a>
-            <a className="hover:text-white" href="#faq">FAQ</a>
-          </nav>
-          <div className="flex items-center gap-3">
-            <Button variant="secondary" href="#preco">Ver oferta</Button>
-            <Button href="https://pay.hotmart.com/K104202042G
-">Comprar</Button>
-          </div>
+      {/* Navbar */}
+<motion.header
+  style={{ opacity: navOpacity, y: navY }}
+  className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/60 backdrop-blur-xl md:opacity-100 md:translate-y-0"
+>
+  <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+
+
+    {/* Logo + marca */}
+    <div className="flex items-center gap-3">
+      <div className="rounded-xl bg-white/10 p-1 backdrop-blur">
+        <Image
+          src="/logo.png"
+          alt="Landing Template"
+          width={100}
+          height={100}
+          className="rounded-lg"
+        />
+      </div>
+
+      <div className="leading-tight">
+        <div className="text-sm font-semibold tracking-tight">
+          Landing Template
         </div>
-      </header>
+        <div className="text-xs text-white/60">
+          Produtos digitais
+        </div>
+      </div>
+    </div>
+
+    {/* Navegação */}
+    <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
+      <a className="hover:text-white" href="#beneficios">Benefícios</a>
+      <a className="hover:text-white" href="#prova">Prova social</a>
+      <a className="hover:text-white" href="#faq">FAQ</a>
+    </nav>
+
+    {/* CTAs */}
+    <div className="flex items-center gap-3">
+      <Button variant="secondary" href="#preco">
+        Ver oferta
+      </Button>
+
+      <Button href="https://pay.hotmart.com/K104202042G">
+        Comprar
+      </Button>
+    </div>
+
+  </div>
+</motion.header>
 
       {/* Hero */}
-      <main className="relative">
+    <main className="relative">
         <section className="mx-auto max-w-6xl px-6 pt-16 md:pt-24">
           <div className="grid gap-10 md:grid-cols-2 md:items-center">
             <div>
@@ -306,8 +342,7 @@ export default function Page() {
               </motion.p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button href="https://pay.hotmart.com/K104202042G
-">Quero essa estrutura</Button>
+                <Button href="https://pay.hotmart.com/K104202042G">Quero essa estrutura</Button>
                 <Button variant="secondary" href="#beneficios">Explorar</Button>
                 <div className="text-xs text-white/50">Sem dependências pesadas • Performance-first</div>
               </div>
@@ -327,72 +362,82 @@ export default function Page() {
             </div>
 
             {/* Hero visual */}
-            <motion.div
-              style={{ translateY: heroShift }}
-              className="relative"
-              aria-hidden
-            >
-              <motion.div
-                style={{ x: cardX, y: cardY }}
-                initial={{ opacity: 0, scale: 0.98, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold">Dashboard Preview</div>
-                  <div className="flex gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-white/30" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-white/30" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-white/30" />
-                  </div>
-                </div>
+<motion.div
+  style={{ translateY: heroShift }}
+  className="relative isolate z-0 overflow-hidden rounded-3xl pb-28 md:pb-0"
+  aria-hidden
+>
+  <motion.div
+    style={{ x: cardX, y: cardY }}
+    initial={{ opacity: 0, scale: 0.98, y: 10 }}
+    animate={{ opacity: 1, scale: 1, y: 0 }}
+    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+    className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+  >
+    {/* Header */}
+    <div className="flex items-center justify-between">
+      <div className="text-sm font-semibold">Dashboard Preview</div>
+      <div className="flex gap-2">
+        <span className="h-2.5 w-2.5 rounded-full bg-white/30" />
+        <span className="h-2.5 w-2.5 rounded-full bg-white/30" />
+        <span className="h-2.5 w-2.5 rounded-full bg-white/30" />
+      </div>
+    </div>
 
-                <div className="mt-5 grid gap-4">
-                  <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
-                    <div className="text-xs text-white/60">Conversão</div>
-                    <div className="mt-2 h-2 w-full rounded-full bg-white/10">
-                      <motion.div
-                        initial={{ width: '0%' }}
-                        animate={{ width: '76%' }}
-                        transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-2 rounded-full bg-white"
-                      />
-                    </div>
-                  </div>
+    {/* Conteúdo */}
+    <div className="mt-5 grid gap-4">
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
-                      <div className="text-xs text-white/60">Tráfego</div>
-                      <div className="mt-2 text-xl font-semibold">+32%</div>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
-                      <div className="text-xs text-white/60">ROI</div>
-                      <div className="mt-2 text-xl font-semibold">2.8x</div>
-                    </div>
-                  </div>
+      {/* Conversão */}
+      <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
+        <div className="text-xs text-white/60">Conversão</div>
+        <div className="mt-2 h-2 w-full rounded-full bg-white/10 overflow-hidden">
+          <motion.div
+            initial={{ width: '0%' }}
+            animate={{ width: '76%' }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="h-2 rounded-full bg-white"
+          />
+        </div>
+      </div>
 
-                  <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
-                    <div className="text-xs text-white/60">Depoimentos</div>
-                    <div className="mt-3 grid gap-3">
-                      {[1, 2, 3].map((i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-white/15" />
-                          <div className="h-3 w-full rounded-full bg-white/10" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+      {/* Cards */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
+          <div className="text-xs text-white/60">Tráfego</div>
+          <div className="mt-2 text-xl font-semibold">+32%</div>
+        </div>
 
-              <div className="absolute -inset-10 -z-10 rounded-[40px] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.20),transparent_55%)] blur-2xl" />
-            </motion.div>
+        <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
+          <div className="text-xs text-white/60">ROI</div>
+          <div className="mt-2 text-xl font-semibold">2.8x</div>
+        </div>
+      </div>
+
+      {/* Depoimentos */}
+      <div className="rounded-2xl border border-white/10 bg-zinc-950/40 p-4">
+        <div className="text-xs text-white/60">Depoimentos</div>
+        <div className="mt-3 grid gap-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-white/15" />
+              <div className="h-3 w-full rounded-full bg-white/10" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </motion.div>
+
+  {/* Glow corrigido */}
+  <div className="absolute -inset-8 -z-10 rounded-3xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.20),transparent_55%)] blur-2xl" />
+</motion.div>
+
           </div>
         </section>
 
         {/* Features */}
-        <section id="beneficios" className="mx-auto max-w-6xl px-6 pt-20 md:pt-28">
+        <section id="beneficios" className="mx-auto max-w-6xl px-6 pt-01 md:pt-28">
           <div className="flex items-end justify-between gap-6">
             <div>
               <h2 className="text-2xl font-semibold md:text-3xl">Benefícios que importam</h2>
@@ -457,8 +502,7 @@ export default function Page() {
                 Vídeos vendem — e ajudam o cliente a visualizar o resultado.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button href="https://pay.hotmart.com/K104202042G
-">Quero comprar por R$ 50</Button>
+                <Button href="https://pay.hotmart.com/K104202042G">Quero comprar por R$ 50</Button>
                 <Button variant="secondary" href="#instalacao">Como instalar</Button>
               </div>
               <div className="mt-6 grid grid-cols-3 gap-3 max-w-lg">
@@ -572,8 +616,7 @@ export default function Page() {
                   É literalmente baixar, instalar dependências e rodar.
                 </p>
               </div>
-              <Button variant="secondary" href="https://pay.hotmart.com/K104202042G
-">Ver preço</Button>
+              <Button variant="secondary" href="https://pay.hotmart.com/K104202042G">Ver preço</Button>
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -643,8 +686,7 @@ npm run dev`}
               </div>
 
               <div className="mt-8 flex flex-col gap-3">
-                <Button href="https://pay.hotmart.com/K104202042G
-">Comprar agora</Button>
+                <Button href="https://pay.hotmart.com/K104202042G">Comprar agora</Button>
                 <Button variant="secondary" href="#faq">Tirar dúvidas</Button>
                 <div className="text-center text-xs text-white/50">Pagamento seguro • Checkout externo</div>
               </div>
@@ -667,7 +709,15 @@ npm run dev`}
           <footer className="mt-16 border-t border-white/10 pt-8 text-sm text-white/60">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-2xl bg-white text-zinc-950 grid place-items-center font-black">LP</div>
+                <div className="rounded-xl bg-white/10 p-1 backdrop-blur">
+                  <Image
+                    src="/logo.png"
+                    alt="Landing Template"
+                    width={28}
+                    height={28}
+                    className="rounded-lg"
+                  />
+                </div>
                 <span>© {new Date().getFullYear()} Landing Template</span>
               </div>
               <div className="flex gap-4">
@@ -675,11 +725,10 @@ npm run dev`}
                 <a className="hover:text-white" href="#">Privacidade</a>
                 <a className="hover:text-white" href="#">Contato</a>
               </div>
-            </div>
-          </footer>
-        </section>
-
-        {/* Sticky mobile CTA */}
+              </div>
+            </footer>
+            </section>
+                    {/* Sticky mobile CTA */}
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           animate={showStickyCta ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
@@ -697,8 +746,7 @@ npm run dev`}
                   <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold">
                     R$ 49,99
                   </div>
-                  <Button href="https://pay.hotmart.com/K104202042G
-">Comprar</Button>
+                  <Button href="https://pay.hotmart.com/K104202042G">Comprar</Button>
                 </div>
               </div>
             </div>
